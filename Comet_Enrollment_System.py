@@ -18,6 +18,7 @@ class Student:
     def addPassedCourse(self, student, course): #Adding courses completed by the student
         if student is None:
             self.passedcourses.append(course)
+            return
         if course not in self.courses: #Student can only finish courses that he is currently taking
             print("Sorry, you cannot add this to your completed courses.")
             return
@@ -149,10 +150,20 @@ class Admin:
         for elem in courses:
             if course.classNbr == elem.classNbr: # ClassNbr is an identifier for a course / This checks the validity of the classnumber
                 print("Course Number already exists in the current courses")
-                return
+                return False
 
         courses.append(course) # Course is added to the list
         print("Successfully added the course.")
+        return True
+
+    def initAddCourse(self, courses, course):
+        for elem in courses:
+            if course.classNbr == elem.classNbr:  # ClassNbr is an identifier for a course / This checks the validity of the classnumber
+                print("Course Number already exists in the current courses")
+                return False
+
+        courses.append(course)  # Course is added to the list
+        return True
 
     def removeCourse(self, courses, course, enrollment): # Removes a course from the current list of courses
         if course in courses: # Checks if course is existing, remove from courses
@@ -191,21 +202,21 @@ class Enrollment:
         units = input()
         print("Course Instructor: ", end="")
         professor = input()
-        print("Course Schedule (Days of the Week):  [M,T,W,H,F,S] ", end="")
+        print("Course Schedule (Days of the Week) [M,T,W,H,F,S]: ", end="")
         days = input()
         print("Course Schedule (Time: 24 Hour Format): ", end="")
         time = input()
         print("Course Section: ", end="")
         section = input()
-        print("Course Number (Class Number):", end="")
+        print("Course Number (Class Number): ", end="")
         classNbr = input()
         print("Course Venue: ", end="")
         room = input()
-        print("Course Capacity:  ", end="")
+        print("Course Capacity: ", end="")
         capacity = input()
 
         course = Course(name, code, (int)(units), professor, days, time, section, classNbr, room, (int)(capacity))
-        if admin.addCourse(self.classes, course):
+        if admin.addCourse(self.courses, course):
             print("Successfully added the course.")
 
     def removeCourse(self, admin): # Function for the admin to remove a course
@@ -289,19 +300,20 @@ class Enrollment:
 
 
 
-comet = Course("COMET", "COMET", 3, "Darth Vader", "TH", "0730-1000", "S16", "1002", "G302B", 50)
+comet = Course("COMET", "COMET", 3, "Darth Vader", "TH", "0730-1000", "S16", "10001", "G405", 50)
 
-csmath2 = Course("Algebra", "CSMATH2", 3, "Duke Delos Santos", "WF", "0915-1045", "S11", "2001", "G204", 40)
+csmath2 = Course("Algebra", "CSMATH2", 3, "Duke Delos Santos", "WF", "0915-1045", "S11", "10002", "G208", 40)
 csmath2.addPrereq(comet)
 
-gefili1 = Course("Filipino", "GEFILI1", 3, "Lilibeth Quiore", "TH", "0730-0900", "S11", "2002", "G206", 5)
+
+gefili1 = Course("Filipino", "GEFILI1", 3, "Lilibeth Quiore", "TH", "0730-0900", "S11", "10003", "G206", 5)
 gefili1.addPrereq(comet)
 
-ccprog3 = Course("OOP", "CCPROG3", 3, "Shirley Chu", "WF", "0730-0900", "S16", "2003", "G302B", 10)
+ccprog3 = Course("OOP", "CCPROG3", 3, "Shirley Chu", "WF", "0730-0900", "S16", "10004", "G304A", 10)
 
-csalgcm = Course("Algo", "CSALGCM", 3, "Neil Del Gallego", "TH", "1430-1600", "S16", "2004", "G208", 35)
+csalgcm = Course("Algo", "CSALGCM", 3, "Neil Del Gallego", "TH", "1430-1600", "S16", "10005", "G208", 35)
 
-csadprg = Course("Language", "CSADPRG", 3, "Charibeth Cheng", "MW", "0915-1045", "S12", "2005", "G210", 20)
+csadprg = Course("Advanced Prog", "CSADPRG", 3, "Charibeth Cheng", "MW", "0915-1045", "S12", "10006", "G210", 20)
 csadprg.addPrereq(comet)
 
 enroll = Enrollment()
@@ -322,12 +334,12 @@ enroll.initAddAdmin(tony)
 
 
 
-tony.addCourse(enroll.courses, comet)
-tony.addCourse(enroll.courses, csmath2)
-tony.addCourse(enroll.courses, gefili1)
-tony.addCourse(enroll.courses, ccprog3)
-tony.addCourse(enroll.courses, csalgcm)
-tony.addCourse(enroll.courses, csadprg)
+tony.initAddCourse(enroll.courses, comet)
+tony.initAddCourse(enroll.courses, csmath2)
+tony.initAddCourse(enroll.courses, gefili1)
+tony.initAddCourse(enroll.courses, ccprog3)
+tony.initAddCourse(enroll.courses, csalgcm)
+tony.initAddCourse(enroll.courses, csadprg)
 
 
 # 3 Student Accounts are initially created:
